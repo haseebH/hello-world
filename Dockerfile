@@ -6,7 +6,7 @@ FROM golang as builder
 WORKDIR /go/src/github.com/haseebh/hello-world
 COPY . .
 
-RUN go build -o helloworld main.go
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o helloworld main.go
 
 # Use a Docker multi-stage build to create a lean production image.
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
