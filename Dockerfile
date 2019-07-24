@@ -1,16 +1,16 @@
 # Use the offical Golang image to create a build artifact.
 # https://hub.docker.com/_/golang
-FROM golang as builder
+FROM golang:1.12.5 as builder
 
 # Copy local code to the container image.
 WORKDIR /go/src/github.com/haseebh/hello-world
 COPY . .
 
-RUN go build -o helloworld main.go
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o helloworld main.go
 
 # Use a Docker multi-stage build to create a lean production image.
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM alpine
+FROM alpine:3.9.4
 
 COPY --from=builder /go/src/github.com/haseebh/hello-world/helloworld /helloworld
 
